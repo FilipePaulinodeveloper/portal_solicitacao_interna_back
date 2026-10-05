@@ -1,59 +1,189 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API - Portal de Solicitações Internas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST desenvolvida para gerenciar solicitações internas de colaboradores. Inclui autenticação por token, cadastro e consulta de solicitações, filtros, dashboard e regras de negócio para edição e exclusão.
 
-## About Laravel
+## Tecnologias
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Linguagem e framework:** PHP 8.2+ e Laravel 12
+- **Banco de dados:** MySQL
+- **Autenticação:** Laravel Sanctum com tokens Bearer
+- **Validação:** Laravel Form Requests e validação de enums
+- **Testes:** Pest
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Pré-requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2 ou superior, com as extensões necessárias ao Laravel e ao driver MySQL
+- Composer
+- MySQL 8 ou compatível
+- Git
 
-## Learning Laravel
+## Instalação e configuração
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+1. Clone o repositório e acesse a pasta do backend:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```bash
+   git clone <url-do-repositorio>
+   cd portal_solicitacao_interna_back
+   ```
 
-## Laravel Sponsors
+2. Instale as dependências PHP:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   ```bash
+   composer install
+   ```
 
-### Premium Partners
+3. Crie o arquivo de ambiente a partir do modelo:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+   ```bash
+   # Linux/macOS
+   cp .env.example .env
 
-## Contributing
+   # Windows PowerShell
+   Copy-Item .env.example .env
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Configure no `.env` as credenciais de uma base MySQL existente:
 
-## Code of Conduct
+   ```dotenv
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=portal_solicitacao_db
+   DB_USERNAME=seu_usuario
+   DB_PASSWORD=sua_senha
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   Para integrar com o frontend local, ajuste também a origem permitida, se necessário:
 
-## Security Vulnerabilities
+   ```dotenv
+   ALLOWED_ORIGINS=http://localhost:5173
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. Gere a chave da aplicação:
 
-## License
+   ```bash
+   php artisan key:generate
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. Crie as tabelas e os usuários de teste:
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+## Execução
+
+Inicie o servidor local da API:
+
+```bash
+php artisan serve
+```
+
+A API estará disponível em `http://localhost:8000`; os endpoints ficam sob o prefixo `/api`.
+
+## Credenciais de desenvolvimento
+
+O seeder cria estas três contas para testes. Todas usam a mesma senha:
+
+| E-mail | Senha |
+|---|---|
+| `usuario1@example.com` | `SenhaDev123!` |
+| `usuario2@example.com` | `SenhaDev123!` |
+| `usuario3@example.com` | `SenhaDev123!` |
+
+Essas credenciais são públicas e servem apenas para desenvolvimento. Não as utilize em produção.
+
+## Autenticação
+
+Faça login em `POST /api/login` enviando e-mail e senha:
+
+```json
+{
+  "email": "usuario1@example.com",
+  "password": "SenhaDev123!"
+}
+```
+
+A resposta inclui um token de acesso. Envie-o nas rotas protegidas no cabeçalho:
+
+```http
+Authorization: Bearer <token>
+Accept: application/json
+```
+
+O logout é feito em `POST /api/logout` e revoga o token atual.
+
+## Endpoints
+
+Todas as rotas abaixo, exceto o login, exigem autenticação Sanctum.
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `POST` | `/api/login` | Autentica o usuário e retorna um token. Pública. |
+| `POST` | `/api/logout` | Revoga o token atual. |
+| `GET` | `/api/dashboard` | Retorna os dados do dashboard. |
+| `GET` | `/api/solicitacoes` | Lista solicitações com paginação e filtros. |
+| `POST` | `/api/solicitacoes` | Cria uma solicitação para o usuário autenticado. |
+| `GET` | `/api/solicitacoes/{id}` | Consulta uma solicitação. |
+| `PUT` / `PATCH` | `/api/solicitacoes/{id}` | Atualiza uma solicitação, somente se estiver com status `Aberto`. |
+| `PATCH` | `/api/solicitacoes/{id}/status` | Atualiza o status da solicitação. |
+| `DELETE` | `/api/solicitacoes/{id}` | Exclui uma solicitação, somente se estiver com status `Aberto`. |
+| `GET` | `/api/user/{id}` | Consulta um usuário. |
+
+
+### Solicitações
+
+Os filtros aceitos por `GET /api/solicitacoes` são `data_inicio`, `data_fim`, `categoria`, `status` e `titulo`. Os resultados são paginados em até 15 itens por página.
+
+Categorias válidas:
+
+- `TI`
+- `RH`
+- `Compras`
+- `Financeiro`
+- `Infraestrutura`
+
+Status válidos:
+
+- `Aberto`
+- `Em andamento`
+- `Concluído`
+
+Exemplo de criação:
+
+```json
+{
+  "titulo": "Acesso ao sistema",
+  "descricao": "Solicito acesso ao sistema de relatórios.",
+  "categoria": "TI"
+}
+```
+
+O usuário da solicitação é associado a partir da identidade autenticada.
+
+Exemplo de atualização de status:
+
+```json
+{
+  "status": "Em andamento"
+}
+```
+
+## Testes
+
+Execute a suíte de testes com:
+
+```bash
+php artisan test
+```
+
+## Estrutura da aplicação
+
+- `app/Http/Controllers`: controllers e tratamento das requisições HTTP
+- `app/Http/Requests`: validação das entradas
+- `app/Services`: regras de negócio e acesso aos modelos
+- `app/Models`: modelos Eloquent
+- `database/migrations`: estrutura do banco de dados
+- `database/seeders`: dados iniciais e contas de desenvolvimento
+- `routes/api.php`: rotas da API
+- `tests`: testes automatizados
