@@ -15,7 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index']);
     
-    Route::resource('user', UserController::class); 
+    Route::resource('user', UserController::class)->only(['show']); 
     Route::patch('solicitacoes/{id}/status', [SolicitacaoController::class, 'atualizarStatus']);
     Route::resource('solicitacoes', SolicitacaoController::class)->only(['store', 'index', 'show', 'update', 'destroy']);    
     Route::post('/logout', [AuthController::class, 'logout']);
