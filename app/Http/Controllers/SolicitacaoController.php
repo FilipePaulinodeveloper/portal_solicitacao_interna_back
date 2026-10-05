@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
 use App\Http\Requests\AtualizarStatusSolicitacaoRequest;
 use App\Http\Requests\IndexSolicitacaoRequest;
 use App\Services\SolicitacaoService;
@@ -28,5 +29,16 @@ class SolicitacaoController extends BaseCRUDSimplesController
         ], 200);
     }
 
+    public function atualizarStatus(AtualizarStatusSolicitacaoRequest $request, string $id)
+    {
+        $solicitacao = $this->service->atualizarStatus(
+            $id,
+            $request->validated()
+        );
 
+        return response()->json([
+            'mensagem' => 'Status da solicitação atualizado com sucesso.',
+            'dados' => $solicitacao,
+        ], 200);
+    }
 }

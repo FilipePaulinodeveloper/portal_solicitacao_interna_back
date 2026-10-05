@@ -41,6 +41,8 @@ test('atualiza somente o status da solicitação', function () {
     ]);
 });
 
+
+
 test('rejeita status ausente ou inválido', function () {
     $usuario = User::factory()->create();
     $solicitacao = criarSolicitacaoParaAtualizacaoStatus($usuario);

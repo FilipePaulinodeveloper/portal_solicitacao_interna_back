@@ -18,5 +18,7 @@ class UserService extends BaseCRUDSimplesService
         $dados['password'] = bcrypt($dados['password']);
         return parent::store($dados);
     }
+
+    
   
 }

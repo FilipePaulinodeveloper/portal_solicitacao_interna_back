@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Models\Solicitacao;
-use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
 
 class SolicitacaoService extends BaseCRUDSimplesService
@@ -51,6 +52,43 @@ class SolicitacaoService extends BaseCRUDSimplesService
         $dados['usuario_id'] =  Auth::id();
         return parent::store($dados);
     }
-    
-  
+
+    public function update(string $id, array $dados): Solicitacao
+    {
+        $solicitacao = $this->model->newQuery()->findOrFail($id);
+
+        if ($solicitacao->status !== Status::ABERTO) {
+            throw new AuthorizationException(
+                'Somente solicitações com status Aberto podem ser atualizadas.'
+            );
+        }
+
+        $solicitacao->update($dados);
+
+        return $solicitacao;
+    }
+
+    public function destroy(string $id): void
+    {
+        $solicitacao = $this->model->newQuery()->findOrFail($id);
+
+        if ($solicitacao->status !== Status::ABERTO) {
+            throw new AuthorizationException(
+                'Somente solicitações com status Aberto podem ser excluídas.'
+            );
+        }
+
+        $solicitacao->delete();
+    }
+
+    public function atualizarStatus(string $id, array $dados): Solicitacao
+    {
+        $solicitacao = Solicitacao::findOrFail($id);
+
+        $solicitacao->update([
+            'status' => $dados['status'],
+        ]);
+
+        return $solicitacao;
+    }
 }
