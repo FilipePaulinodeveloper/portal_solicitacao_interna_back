@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('solicitacoes', SolicitacaoController::class)->only(['store', 'index', 'show', 'update', 'destroy']);    
     Route::post('/logout', [AuthController::class, 'logout']);
     
-    });
+});
