@@ -187,3 +187,7 @@ php artisan test
 - `database/seeders`: dados iniciais e contas de desenvolvimento
 - `routes/api.php`: rotas da API
 - `tests`: testes automatizados
+
+## Memorial Técnico
+https://docs.google.com/document/d/1Z0i9wmPTH_kLqqwDPWvNRRwn1NxBvuGSAkCGBSYu3W0/
+
