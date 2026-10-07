@@ -17,6 +17,61 @@ API REST desenvolvida para gerenciar solicitações internas de colaboradores. I
 - MySQL 8 ou compatível
 - Git
 
+## Instalação do PHP
+O projeto requer PHP 8.2 ou superior dentro da versão 8.2.x.
+1. Acesse a página oficial de downloads do PHP para Windows:
+https://www.php.net/downloads.php?os=windows&osvariant=windows-downloads&version=8.2
+
+
+2. Após extrair o PHP, configure o diretório do PHP na variável de ambiente PATH do Windows:
+```bash
+Pesquise por "Variáveis de Ambiente" no menu Iniciar.
+
+Acesse "Editar as variáveis de ambiente do sistema".
+
+Clique em "Variáveis de Ambiente...".
+
+Na seção "Variáveis do sistema", selecione Path e clique em "Editar".
+
+Clique em "Novo" e informe o caminho da pasta onde o PHP foi extraído.
+
+Confirme todas as alterações.
+ ```
+
+3. Verifique a instalação:
+ ```bash
+php -v
+```
+
+4. Extensões do PHP
+
+Certifique-se de que as seguintes extensões estejam habilitadas no arquivo php.ini:
+```bash
+extension=curl
+extension=fileinfo
+extension=mbstring
+extension=openssl
+extension=pdo_mysql
+extension=mysqli
+```
+## Instalação do Composer
+O projeto utiliza o Composer 2.10.1.
+
+1. Baixe e instale o Composer pelo site oficial:
+https://getcomposer.org/download/
+
+2. Após a instalação, execute:
+
+ ```bash
+  composer self-update 2.10.1
+   ```
+
+
+3. Verifique a versão deve retprmar a versão 2.10.1:
+ ```bash
+composer --version
+  ```
+  
 ## Instalação e configuração
 
 1. Clone o repositório e acesse a pasta do backend:
